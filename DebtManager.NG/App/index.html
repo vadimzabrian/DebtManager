@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DebtManager</title>
+    <link href="/Content/Site.css" rel="stylesheet" />
+</head>
+<body ng-app="debtManager">
+
+    <ng-view></ng-view>
+
+    <script src="/Scripts/angular.js"></script>
+    <script src="/Scripts/angular-route.min.js"></script>
+    <script src="app.js"></script>
+    <script src="app.config.js"></script>
+
+    <script src="Areas/Payment/Controllers/payments.js"></script>
+    <script src="Areas/Payment/Controllers/payment.js"></script>
+    <script src="Areas/Dashboard/Controllers/dashboard.js"></script>
+
+    <script src="Factories/payment.js"></script>
+    <script src="Factories/user.js"></script>
+    <script src="Factories/dashboard.js"></script>
+
+    <script src="Services/contentTypeInterceptorService.js"></script>
+
+</body>
+
+</html>
+

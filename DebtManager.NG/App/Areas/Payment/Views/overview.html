@@ -1,0 +1,26 @@
+﻿<table>
+    <tbody>
+        <tr>
+            <th colspan="2" align="left"><a href="#/">Dashboard</a></th>
+            <th colspan="2" align="right"><input type="button" value="Add Payment" ng-click="addPaymentClicked();" /></th>
+        </tr>
+        <tr>
+            <th colspan="4"><h3>Payments</h3></th>
+        </tr>
+        <tr>
+            <!--<th>Date</th>-->
+            <th>Has payed</th>
+            <th>Has received</th>
+            <th>Amount</th>
+            <th>Reason</th>
+        </tr>
+        <tr ng-repeat="p in payments">
+            <td class="id" style="display: none;">n{{p.Id}}</</td>
+            <!--<td class="date">{{p.Date}}</td>-->
+            <td class="payer">{{p.PayerName}}</td>
+            <td class="receiver">{{p.ReceiverName}}</td>
+            <td class="amount">{{p.Amount}}</td>
+            <td class="reason">{{p.Reason}}</td>
+        </tr>
+    </tbody>
+</table>

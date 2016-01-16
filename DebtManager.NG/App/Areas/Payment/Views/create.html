@@ -1,0 +1,28 @@
+﻿<form ng-submit="submit()">
+    <table>
+        <tr>
+            <td>Has payed</td>
+            <td>
+                <select ng-model="model.Payer" ng-options="user.Name for user in users"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>Has received</td>
+            <td>
+                <select ng-model="model.Receiver" ng-options="user.Name for user in users"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>Amount</td>
+            <td><input type="number" ng-model="model.Amount" required maxlength="5" min="1" /></td>
+        </tr>
+        <tr>
+            <td>Reason</td>
+            <td><input type="text" ng-model="model.Reason" required /></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Create" /></td>
+            <td><label ng-show="errorMessage != ''">{{errorMessage}}</label></td>
+        </tr>
+    </table>
+</form>

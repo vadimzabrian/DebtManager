@@ -1,0 +1,22 @@
+﻿<table>
+    <tbody>
+        <tr>
+            <th colspan="2" align="left"><a href="#/Payments">Payments</a></th>
+        </tr>
+        <tr>
+            <th colspan="4"><h3>Dashboard</h3></th>
+        </tr>
+        <tr ng-show="!displayEmptyMessage">
+            <th>Must pay</th>
+            <th>Amount</th>
+            <th>Must receive</th>
+        </tr>
+        <tr ng-repeat="ad in aggregatedMinimizedDebts" ng-show="!displayEmptyMessage">
+            <td class="payer">{{ad.MustPayName}}</td>
+            <td class="amount">{{ad.Amount}}</td>
+            <td class="receiver">{{ad.MustReceiveName}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<label ng-show="displayEmptyMessage">Nobody owes to nobody else. Ss an application, I feel useless.</label>
