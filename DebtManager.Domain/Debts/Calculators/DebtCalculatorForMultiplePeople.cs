@@ -1,4 +1,5 @@
-﻿using DebtManager.Domain.Entities;
+﻿using DebtManager.Domain.Debts.Queries;
+using DebtManager.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,13 +8,15 @@ namespace DebtManager.Domain.DebtCalculations
     public class DebtCalculatorForMultiplePeople : IDebtCalculatorForMultiplePeople
     {
         IDebtCalculatorForTwoPeople _debtCalculatorForTwoPeople;
+        IExistsDebtForUsers_Query _existsDebtForUsers_Query;
 
-        public DebtCalculatorForMultiplePeople(IDebtCalculatorForTwoPeople debtCalculatorForTwoPeople)
+        public DebtCalculatorForMultiplePeople(IDebtCalculatorForTwoPeople debtCalculatorForTwoPeople, IExistsDebtForUsers_Query existsDebtForUsers_Query)
         {
             _debtCalculatorForTwoPeople = debtCalculatorForTwoPeople;
+            _existsDebtForUsers_Query = existsDebtForUsers_Query;
         }
 
-        public IQueryable<Debt> Execute(IQueryable<Payment> payments)
+        public List<Debt> Execute(IQueryable<Payment> payments)
         {
             var userIds = payments.Select(p => p.Payer.Id).Union(payments.Select(p => p.Receiver.Id)).Distinct().ToList();
 
@@ -23,7 +26,7 @@ namespace DebtManager.Domain.DebtCalculations
             {
                 foreach (int u2Id in userIds)
                 {
-                    if (Debt.ArrayContainsDebtFor(debts, u1Id, u2Id) || u1Id == u2Id) continue;
+                    if (_existsDebtForUsers_Query.Execute(debts, u1Id, u2Id) || u1Id == u2Id) continue;
 
                     debts.Add(_debtCalculatorForTwoPeople.Execute(u1Id, u2Id, payments));
                 }
@@ -32,12 +35,12 @@ namespace DebtManager.Domain.DebtCalculations
             debts.RemoveAll(ad => ad.Amount == 0);
             debts = debts.OrderBy(ad => ad.MustPayId).ThenBy(ad => ad.MustReceiveId).ToList();
 
-            return debts.AsQueryable();
+            return debts;
         }
     }
 
     public interface IDebtCalculatorForMultiplePeople
     {
-        IQueryable<Debt> Execute(IQueryable<Payment> payments);
+        List<Debt> Execute(IQueryable<Payment> payments);
     }
 }

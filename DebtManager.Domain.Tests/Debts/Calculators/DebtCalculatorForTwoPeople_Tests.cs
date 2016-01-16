@@ -1,4 +1,5 @@
 ﻿using DebtManager.Domain.DebtCalculations;
+using DebtManager.Domain.Debts;
 using DebtManager.Domain.Dtos;
 using DebtManager.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -37,7 +38,7 @@ namespace DebtManager.Domain.Tests.DebtCalculations
             payments.Add(Payment.FromDto(new PaymentDto { Amount = 17 }, adrian, bogdan));
             payments.Add(Payment.FromDto(new PaymentDto { Amount = 13 }, adrian, bogdan));
 
-            var result = new DebtCalculatorForTwoPeople().Execute(adrian.Id, bogdan.Id, payments.AsQueryable());
+            var result = new DebtCalculatorForTwoPeople(new DebtNormalizer()).Execute(adrian.Id, bogdan.Id, payments.AsQueryable());
 
             Assert.AreEqual(30, result.Amount);
             Assert.AreEqual(bogdan.Id, result.MustPayId);
@@ -54,7 +55,7 @@ namespace DebtManager.Domain.Tests.DebtCalculations
             payments.Add(Payment.FromDto(new PaymentDto { Amount = 17 }, adrian, bogdan));
             payments.Add(Payment.FromDto(new PaymentDto { Amount = 13 }, bogdan, adrian));
 
-            var result = new DebtCalculatorForTwoPeople().Execute(adrian.Id, bogdan.Id, payments.AsQueryable());
+            var result = new DebtCalculatorForTwoPeople(new DebtNormalizer()).Execute(adrian.Id, bogdan.Id, payments.AsQueryable());
 
             Assert.AreEqual(4, result.Amount);
             Assert.AreEqual(bogdan.Id, result.MustPayId);

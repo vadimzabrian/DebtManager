@@ -4,6 +4,7 @@ using DebtManager.Application.Payments;
 using DebtManager.Application.Users;
 using DebtManager.Domain.DebtCalculations;
 using DebtManager.Domain.Debts;
+using DebtManager.Domain.Debts.Queries;
 using DebtManager.Domain.Minimizers;
 using DebtManager.Infrastructure.EFCodeFirst;
 using DebtManager.WebAPI.Controllers;
@@ -32,6 +33,10 @@ namespace DebtManager.WebAPI
             container.RegisterType<IPaymentCreator, PaymentCreator>(new HierarchicalLifetimeManager());
             container.RegisterType<IPaymentsProvider, PaymentsProvider>(new HierarchicalLifetimeManager());
             container.RegisterType<IUsersProvider, UsersProvider>(new HierarchicalLifetimeManager());
+            container.RegisterType<IExistsDebtForUsers_Query, ExistsDebtForUsers_Query>(new HierarchicalLifetimeManager());
+            container.RegisterType<IDebtNormalizer, DebtNormalizer>(new HierarchicalLifetimeManager());            
+
+            
 
             //var tmp = container.Resolve<UsersProvider>().Execute();
 

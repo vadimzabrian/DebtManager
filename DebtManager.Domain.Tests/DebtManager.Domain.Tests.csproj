@@ -40,7 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Debts\Calculators\DebtCalculatorForMultiplePeople_Tests.cs" />
+    <Compile Include="Debts\Calculators\DebtCalculatorForOnePerson_Tests.cs" />
     <Compile Include="Debts\Calculators\DebtCalculatorForTwoPeople_Tests.cs" />
+    <Compile Include="Debts\DebtNormalizer_Tests.cs" />
+    <Compile Include="Debts\PairMinimizer_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,18 @@
-﻿using DebtManager.Domain.Entities;
+﻿using DebtManager.Domain.Debts;
+using DebtManager.Domain.Entities;
 using System.Linq;
 
 namespace DebtManager.Domain.DebtCalculations
 {
     public class DebtCalculatorForTwoPeople : IDebtCalculatorForTwoPeople
     {
+        IDebtNormalizer _debtNormalizer;
+
+        public DebtCalculatorForTwoPeople(IDebtNormalizer debtNormalizer)
+        {
+            _debtNormalizer = debtNormalizer;
+        }
+
         public Debt Execute(int user1Id, int user2Id, IQueryable<Payment> payments)
         {
             var debt = new Debt();
@@ -22,7 +30,7 @@ namespace DebtManager.Domain.DebtCalculations
                 debt.Amount += payments.Where(p => p.Payer.Id == user2Id && p.Receiver.Id == user1Id).Sum(p => p.Amount);
             }
 
-            debt.Normalize();
+            debt = _debtNormalizer.Execute(debt);
 
             return debt;
         }

@@ -54,6 +54,8 @@
     <Compile Include="Debts\Calculators\DebtCalculatorForOnePerson.cs" />
     <Compile Include="Debts\Calculators\DebtCalculatorForTwoPeople.cs" />
     <Compile Include="Debts\Converters\DebtsToDebtDtosConverter.cs" />
+    <Compile Include="Debts\DebtNormalizer.cs" />
+    <Compile Include="Debts\Queries\ExistsDebtForUsers_Query.cs" />
     <Compile Include="Payments\PaymentDto.cs" />
     <Compile Include="Users\Filters\UsersFilter.cs" />
     <Compile Include="Users\UserDto.cs" />

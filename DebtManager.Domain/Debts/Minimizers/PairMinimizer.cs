@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using DebtManager.Domain.Entities;
 using System.Linq;
+using DebtManager.Domain.Debts;
 
 namespace DebtManager.Domain.Minimizers
 {
     public class PairMinimizer : IPairMinimizer
     {
+        IDebtNormalizer _debtNormalizer;
+
+        public PairMinimizer(IDebtNormalizer debtNormalizer)
+        {
+            _debtNormalizer = debtNormalizer;
+        }
+
         public IQueryable<Debt> Execute(List<Debt> debts)
         {
             var userIds = debts.Select(p => p.MustPayId).Union(debts.Select(p => p.MustReceiveId)).Distinct();
@@ -36,7 +44,7 @@ namespace DebtManager.Domain.Minimizers
                         else
                         {
                             line.Amount -= ad2.Amount;
-                            line.Normalize();
+                            line = _debtNormalizer.Execute(line);
                         }
                     }
 
@@ -62,7 +70,7 @@ namespace DebtManager.Domain.Minimizers
                         else
                         {
                             line.Amount -= ad1.Amount;
-                            line.Normalize();
+                            line = _debtNormalizer.Execute(line);
                         }
                     }
 
