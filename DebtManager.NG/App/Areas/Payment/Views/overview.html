@@ -8,19 +8,19 @@
             <th colspan="4"><h3>Payments</h3></th>
         </tr>
         <tr>
-            <!--<th>Date</th>-->
             <th>Has payed</th>
             <th>Has received</th>
             <th>Amount</th>
-            <th>Reason</th>
+            <th>Reason</th>           
+            <th>Date</th>
         </tr>
         <tr ng-repeat="p in payments">
             <td class="id" style="display: none;">n{{p.Id}}</</td>
-            <!--<td class="date">{{p.Date}}</td>-->
             <td class="payer">{{p.PayerName}}</td>
             <td class="receiver">{{p.ReceiverName}}</td>
             <td class="amount">{{p.Amount}}</td>
-            <td class="reason">{{p.Reason}}</td>
+            <td class="reason">{{p.Reason}}</td>            
+            <td class="date">{{p.Date}}</td>
         </tr>
     </tbody>
 </table>
