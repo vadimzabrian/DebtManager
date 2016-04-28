@@ -1,28 +1,22 @@
 ﻿<form ng-submit="submit()">
-    <table>
-        <tr>
-            <td>Has payed</td>
-            <td>
-                <select ng-model="model.Payer" ng-options="user.Name for user in users"></select>
-            </td>
-        </tr>
-        <tr>
-            <td>Has received</td>
-            <td>
-                <select ng-model="model.Receiver" ng-options="user.Name for user in users"></select>
-            </td>
-        </tr>
-        <tr>
-            <td>Amount</td>
-            <td><input type="number" ng-model="model.Amount" required maxlength="5" min="1" /></td>
-        </tr>
-        <tr>
-            <td>Reason</td>
-            <td><input type="text" ng-model="model.Reason" required /></td>
-        </tr>
-        <tr>
-            <td><input type="submit" value="Create" /></td>
-            <td><label ng-show="errorMessage != ''">{{errorMessage}}</label></td>
-        </tr>
-    </table>
+    <div class="form-group">
+        <label>Has payed</label>
+        <select ng-model="model.Payer" ng-options="user.Name for user in users" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label>Has received</label>
+        <select ng-model="model.Receiver" ng-options="user.Name for user in users" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label>Amount</label>
+        <input type="number" ng-model="model.Amount" required maxlength="5" min="1" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Reason</label>
+        <input type="text" ng-model="model.Reason" required class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-success pull-right btn-lg" value="Create" />
+        <label ng-show="errorMessage != ''">{{errorMessage}}</label>
+    </div>
 </form>

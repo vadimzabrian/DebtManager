@@ -1,22 +1,30 @@
-﻿<table>
+﻿<h3 class="pull-left">Debts</h3>
+
+<table id="dashboard" ng-show="!displayEmptyMessage" class="table table-striped table-bordered table-condensed table-hover">
     <tbody>
         <tr>
-            <th colspan="2" align="left"><a href="#/Payments">Payments</a></th>
-        </tr>
-        <tr>
-            <th colspan="4"><h3>Dashboard</h3></th>
-        </tr>
-        <tr ng-show="!displayEmptyMessage">
             <th>Must pay</th>
             <th>Amount</th>
             <th>Must receive</th>
         </tr>
-        <tr ng-repeat="ad in aggregatedMinimizedDebts" ng-show="!displayEmptyMessage">
+        <tr ng-repeat="ad in aggregatedMinimizedDebts">
             <td class="payer">{{ad.MustPayName}}</td>
             <td class="amount">{{ad.Amount}}</td>
             <td class="receiver">{{ad.MustReceiveName}}</td>
         </tr>
     </tbody>
 </table>
-
 <label ng-show="displayEmptyMessage">Nobody owes to nobody else. Ss an application, I feel useless.</label>
+
+<!--col-sm-offset-0 - offsets the element
+pull-fight      - float
+img-thumbnail   - makes an image resize automatically
+hidden-xs       - hides element for certain resolutions
+visible-xs      - opposite of hidden
+
+btn-succes, btn-warning, btn-error
+btn-lg, btn-xs
+
+
+<span class="glyphicon glyphicon-chevron-left"></span>
+    -->

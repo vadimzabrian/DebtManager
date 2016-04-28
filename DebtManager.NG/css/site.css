@@ -1,0 +1,12 @@
+﻿body {
+    margin-top: 70px;
+}
+
+#dashboard tr td.payer {
+    color: red;
+}
+
+#dashboard tr td.receiver {
+    color: green;
+}
+

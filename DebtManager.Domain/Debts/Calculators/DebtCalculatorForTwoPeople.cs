@@ -26,8 +26,8 @@ namespace DebtManager.Domain.DebtCalculations
 
             if (payments != null)
             {
-                debt.Amount -= payments.Where(p => p.Payer.Id == user1Id && p.Receiver.Id == user2Id).Sum(p => p.Amount);
-                debt.Amount += payments.Where(p => p.Payer.Id == user2Id && p.Receiver.Id == user1Id).Sum(p => p.Amount);
+                debt.Amount -= payments.Where(p => p.Payer.Id == user1Id && p.Receiver.Id == user2Id).Select(l => l.Amount).DefaultIfEmpty(0).Sum();
+                debt.Amount += payments.Where(p => p.Payer.Id == user2Id && p.Receiver.Id == user1Id).Select(l => l.Amount).DefaultIfEmpty(0).Sum();
             }
 
             debt = _debtNormalizer.Execute(debt);

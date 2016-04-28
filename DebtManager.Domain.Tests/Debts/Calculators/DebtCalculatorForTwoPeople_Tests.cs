@@ -61,5 +61,20 @@ namespace DebtManager.Domain.Tests.DebtCalculations
             Assert.AreEqual(bogdan.Id, result.MustPayId);
             Assert.AreEqual(adrian.Id, result.MustReceiveId);
         }
+
+        [TestMethod]
+        public void Should_Handle_NonExisting_Payments()
+        {
+            var adrian = new User { Id = 1 };
+            var bogdan = new User { Id = 2 };
+
+            var payments = new List<Payment>();
+            //payments.Add(Payment.FromDto(new PaymentDto { Amount = 17 }, adrian, bogdan));
+            //payments.Add(Payment.FromDto(new PaymentDto { Amount = 13 }, bogdan, adrian));
+
+            var result = new DebtCalculatorForTwoPeople(new DebtNormalizer()).Execute(adrian.Id, bogdan.Id, payments.AsQueryable());
+
+            Assert.AreEqual(0, result.Amount);
+        }
     }
 }
