@@ -1,0 +1,29 @@
+﻿@model DebtManager.Mvc.Models.PaymentVM
+Create payment
+
+@using (Html.BeginForm("Create", "Payments", FormMethod.Post,
+                                      new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <div class="form-group">
+            <label>Has payed</label>
+            @Html.DropDownListFor(m => m.PayerId, Model.Users)
+        </div>
+        <div class="form-group">
+            <label>Has received</label>
+            @Html.DropDownListFor(m => m.ReceiverId, Model.Users)
+        </div>
+        <div class="form-group">
+            <label>Amount</label>
+            @Html.TextBoxFor(m => m.Amount, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <label>Reason</label>
+            @Html.TextBoxFor(m => m.Reason, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-success pull-right btn-lg" value="Create" />
+        </div>
+    </fieldset>
+}

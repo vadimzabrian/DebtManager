@@ -94,6 +94,13 @@
     <Content Include="Scripts\respond.min.js" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -113,7 +120,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>59685</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:59685/</IISUrl>
+          <IISUrl>http://localhost:59685</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

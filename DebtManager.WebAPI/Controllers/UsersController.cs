@@ -8,13 +8,13 @@ using System.Web.Http.Cors;
 namespace DebtManager.WebAPI.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [Authorize]
     public class UsersController : ApiController
     {
         // GET api/values
         public IEnumerable<User> Get()
         {
             return DependencyResolver.Resolve<IUsersProvider>().Execute();
-            //return new UsersProvider().Execute().ToArray();
         }
     }
 }

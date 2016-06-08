@@ -1,0 +1,25 @@
+﻿@model IEnumerable<DebtManager.Mvc.Models.DebtVM>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Debts go here</h2>
+
+
+<table class="table table-striped table-bordered table-condensed table-hover">
+    <tbody>
+        <tr>
+            <th>Must pay</th>
+            <th>Amount</th>
+            <th>Must receive</th>
+        </tr>
+        @foreach (var d in Model)
+        {
+            <tr>
+                <td class="payer">@d.MustPayName</td>
+                <td class="receiver">@d.Amount</td>
+                <td class="amount">@d.MustReceiveName</td>
+            </tr>
+        }
+    </tbody>
+</table>

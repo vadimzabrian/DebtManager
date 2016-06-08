@@ -13,6 +13,7 @@ using System.Web.Http.Cors;
 namespace DebtManager.WebAPI.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [Authorize]
     public class PaymentsController : ApiController
     {
         // GET api/values
@@ -32,6 +33,7 @@ namespace DebtManager.WebAPI.Controllers
                     Reason = p.Reason
                 }).ToArray();
         }
+
 
         // POST api/values
         [HttpPost]

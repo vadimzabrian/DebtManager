@@ -12,6 +12,7 @@ using System.Web.Http.Cors;
 namespace DebtManager.WebAPI.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [Authorize]
     public class MinimizedDebtsController : ApiController
     {
         [HttpGet]
