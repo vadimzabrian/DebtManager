@@ -16,5 +16,8 @@ namespace DebtManager.Domain.Dtos
         public string Reason { get; set; }
         public int Status { get; set; }
         public string StatusName { get; set; }
+        public DateTime? AcceptedDate { get; set; }
+        public int PayerBalance { get; set; }
+        public int ReceiverBalance { get; set; }
     }
 }

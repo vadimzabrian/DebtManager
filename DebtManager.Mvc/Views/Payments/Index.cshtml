@@ -88,7 +88,8 @@
                 <th>Has received</th>
                 <th>Amount</th>
                 <th>Reason</th>
-                <th>Date</th>
+                <th>AcceptedDate</th>
+                <th>Balance</th>
             </tr>
             @foreach (var p in Model.Payments.Where(p => p.Status == 1 || p.Status == 3))
             {
@@ -98,7 +99,11 @@
                     <td class="receiver">@p.ReceiverName</td>
                     <td class="amount">@p.Amount</td>
                     <td class="reason">@p.Reason</td>
-                    <td class="date">@p.Date</td>
+                    <td class="date">@p.AcceptedDate</td>
+                    <td class="balance">
+                        @if (Model.LoggedInUsername == p.ReceiverUsername) { @p.ReceiverBalance }
+                        @if (Model.LoggedInUsername == p.PayerUsername) { @p.PayerBalance }
+                    </td>
                 </tr>
             }
         </tbody>

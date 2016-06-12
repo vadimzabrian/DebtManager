@@ -9,20 +9,23 @@ namespace DebtManager.Application.Payments
     public class PaymentUpdater
     {
         IDbRepository _dbRepository;
+        DebtManager.Domain.IBalanceCalculator _domainBalanceCalculator;
 
-        public PaymentUpdater(IDbRepository dbRepository)
+        public PaymentUpdater(IDbRepository dbRepository, DebtManager.Domain.IBalanceCalculator domainBalanceCalculator)
         {
             _dbRepository = dbRepository;
+            _domainBalanceCalculator = domainBalanceCalculator;
 
             if (_dbRepository == null) throw new Exception("dbRepository is null");
+            if (_domainBalanceCalculator == null) throw new Exception("_domainBalanceCalculator is null");
         }
 
         public void Accept(int paymentId, string actionInitializerUsername)
         {
             var actionInitializer = _dbRepository.GetAll<User>().FirstOrDefault(p => p.Username == actionInitializerUsername);
-            var existingPayment = _dbRepository.GetAll<Payment>().FirstOrDefault(p => p.Id == paymentId);
+            var existingPayment = _dbRepository.GetAll<Payment>(new[] { "Payer", "Receiver" }).FirstOrDefault(p => p.Id == paymentId);
 
-            existingPayment.Accept(actionInitializer.Id);
+            existingPayment.Accept(actionInitializer.Id, _domainBalanceCalculator, _dbRepository.GetAll<Payment>());
             _dbRepository.PersistChanges();
         }
 

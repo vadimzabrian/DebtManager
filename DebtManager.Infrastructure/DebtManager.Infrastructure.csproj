@@ -74,6 +74,8 @@
     <Content Include="DbScripts\004_DeleteDebtsTable.sql" />
     <Content Include="DbScripts\005_Add_Username_to_Users.sql" />
     <Content Include="DbScripts\006_Add_Status_to_Payments.sql" />
+    <Content Include="DbScripts\007_Add_AcceptedDate_to_Payments.sql" />
+    <Content Include="DbScripts\008_Add_Balance_field_to_Payments.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DebtManager.Application\DebtManager.Application.csproj">

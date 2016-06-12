@@ -18,7 +18,7 @@ namespace DebtManager.Application.Payments.Queries
         public IList<PaymentDto> ExecuteFor(string username)
         {
             var payments = _paymentsProvider.Execute()
-                .OrderByDescending(u => u.Date)
+                .OrderByDescending(u => u.AcceptedDate)
                 .Where(p => p.Payer.Username == username || p.Receiver.Username == username)
                 .Select(p => new PaymentDto
                 {
@@ -32,7 +32,10 @@ namespace DebtManager.Application.Payments.Queries
                     Amount = p.Amount,
                     Date = p.Date,
                     Reason = p.Reason,
-                    Status = p.Status
+                    Status = p.Status,
+                    AcceptedDate = p.AcceptedDate,
+                    PayerBalance = p.PayerBalance,
+                    ReceiverBalance = p.ReceiverBalance
                 }).ToList();
 
             foreach (var p in payments)

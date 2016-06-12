@@ -1,6 +1,7 @@
 ﻿using DebtManager.Domain.Dtos;
 using DebtManager.Domain.Payments;
 using System;
+using System.Linq;
 using Vadim.Common;
 
 namespace DebtManager.Domain.Entities
@@ -14,13 +15,16 @@ namespace DebtManager.Domain.Entities
         public DateTime Date { get; private set; }
         public string Reason { get; private set; }
         public int Status { get; private set; }
+        public DateTime? AcceptedDate { get; private set; }
+        public int PayerBalance { get; private set; }
+        public int ReceiverBalance { get; private set; }
 
         private Payment()
         {
             this.Status = (int)PaymentStatus.Pending;
         }
 
-        public void Accept(int actionInitiatorId)
+        public void Accept(int actionInitiatorId, IBalanceCalculator balanceCalculator, IQueryable<Payment> payments)
         {
             #region validations
             if (this.Status != (int)PaymentStatus.Pending) throw new Exception("Invalid operation. A payment can go to Active state only from Pending.");
@@ -28,6 +32,10 @@ namespace DebtManager.Domain.Entities
             #endregion
 
             this.Status = (int)PaymentStatus.Active;
+            this.AcceptedDate = DateTime.UtcNow;
+
+            this.PayerBalance = balanceCalculator.ExecuteFor(this.Payer.Id, payments).GetBalance();
+            this.ReceiverBalance = balanceCalculator.ExecuteFor(this.Receiver.Id, payments).GetBalance();      
         }
 
         public void Reject(int actionInitiatorId)
