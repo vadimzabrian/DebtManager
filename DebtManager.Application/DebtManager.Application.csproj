@@ -56,9 +56,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Balance\BalanceCalculator.cs" />
     <Compile Include="Infrastructure\IDbRepository.cs" />
     <Compile Include="Payments\PaymentCreator.cs" />
     <Compile Include="Payments\PaymentsProvider.cs" />
+    <Compile Include="Payments\PaymentUpdater.cs" />
+    <Compile Include="Payments\Queries\PaymentsForUser_Query.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Users\UsersProvider.cs" />
   </ItemGroup>

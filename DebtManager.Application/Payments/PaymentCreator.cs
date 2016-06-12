@@ -16,7 +16,7 @@ namespace DebtManager.Application
 
         public Payment Execute(PaymentDto dto)
         {
-            var payment = Payment.FromDto(dto, _dbRepository.GetAll<User>().First(u => u.Id == dto.PayerId), _dbRepository.GetAll<User>().First(u => u.Id == dto.ReceiverId));
+            var payment = Payment.FromDto(dto, _dbRepository.GetAll<User>().First(u => u.Username == dto.PayerUsername), _dbRepository.GetAll<User>().First(u => u.Id == dto.ReceiverId));
 
             _dbRepository.Add(payment);
 

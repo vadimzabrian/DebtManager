@@ -1,25 +1,62 @@
-﻿@model IEnumerable<DebtManager.Mvc.Models.DebtVM>
+﻿@model DebtManager.Mvc.Models.DashboardVM
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Debts go here</h2>
+<h2>Dashboard</h2>
+
+Current balance:
+@if (@Model.Balance.MustPayAmount.HasValue)
+{
+    <span>You must pay a total of </span> @Model.Balance.MustPayAmount
+}
+@if (@Model.Balance.MustReceiveAmount.HasValue)
+{
+    <span>You must receive a total of</span> @Model.Balance.MustReceiveAmount
+}
 
 
-<table class="table table-striped table-bordered table-condensed table-hover">
-    <tbody>
-        <tr>
-            <th>Must pay</th>
-            <th>Amount</th>
-            <th>Must receive</th>
-        </tr>
-        @foreach (var d in Model)
-        {
+
+
+@if (Model.Debts.Any(d => d.MustReceiveUsername == Model.LoggedInUsername))
+{
+    <h3>You must receive</h3>
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <tbody>
             <tr>
-                <td class="payer">@d.MustPayName</td>
-                <td class="receiver">@d.Amount</td>
-                <td class="amount">@d.MustReceiveName</td>
+                <th>From</th>
+                <th>Amount</th>
             </tr>
-        }
-    </tbody>
-</table>
+            @foreach (var d in Model.Debts.Where(d => d.MustReceiveUsername == Model.LoggedInUsername))
+            {
+                <tr>
+                    <td class="payer">@d.MustPayName</td>
+                    <td class="amount">@d.Amount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (Model.Debts.Any(d => d.MustPayUsername == Model.LoggedInUsername))
+{
+    <h3>You must pay</h3>
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <tbody>
+            <tr>
+                <th>To</th>
+                <th>Amount</th>
+            </tr>
+            @foreach (var d in Model.Debts.Where(d => d.MustPayUsername == Model.LoggedInUsername))
+            {
+                <tr>
+                    <td class="receiver">@d.MustReceiveName</td>
+                    <td class="amount">@d.Amount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+

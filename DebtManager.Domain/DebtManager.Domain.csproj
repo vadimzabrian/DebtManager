@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Balance\Balance.cs" />
+    <Compile Include="Balance\BalanceCalculator.cs" />
     <Compile Include="Debts\Debt.cs" />
     <Compile Include="Debts\DebtDto.cs" />
     <Compile Include="Debts\Calculators\DebtCalculatorForMultiplePeople.cs" />
@@ -57,6 +59,7 @@
     <Compile Include="Debts\DebtNormalizer.cs" />
     <Compile Include="Debts\Queries\ExistsDebtForUsers_Query.cs" />
     <Compile Include="Payments\PaymentDto.cs" />
+    <Compile Include="Payments\PaymentStatus.cs" />
     <Compile Include="Users\Filters\UsersFilter.cs" />
     <Compile Include="Users\UserDto.cs" />
     <Compile Include="Payments\Payment.cs" />

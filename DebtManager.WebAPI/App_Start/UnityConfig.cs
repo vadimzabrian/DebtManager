@@ -34,7 +34,11 @@ namespace DebtManager.WebAPI
             container.RegisterType<IPaymentsProvider, PaymentsProvider>(new HierarchicalLifetimeManager());
             container.RegisterType<IUsersProvider, UsersProvider>(new HierarchicalLifetimeManager());
             container.RegisterType<IExistsDebtForUsers_Query, ExistsDebtForUsers_Query>(new HierarchicalLifetimeManager());
-            container.RegisterType<IDebtNormalizer, DebtNormalizer>(new HierarchicalLifetimeManager());            
+            container.RegisterType<IDebtNormalizer, DebtNormalizer>(new HierarchicalLifetimeManager());
+            container.RegisterType<IBalanceCalculator, BalanceCalculator>(new HierarchicalLifetimeManager());
+            container.RegisterType<DebtManager.Domain.IBalanceCalculator, DebtManager.Domain.BalanceCalculator>(new HierarchicalLifetimeManager());  
+         
+            
 
             
 

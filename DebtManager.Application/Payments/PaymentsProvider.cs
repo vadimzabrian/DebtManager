@@ -15,6 +15,7 @@ namespace DebtManager.Application.Payments
 
         public IQueryable<Payment> Execute()
         {
+            // ToDo - implement lazy loading
             return _dbRepository.GetAll<Payment>(new[] { "Payer", "Receiver" });
         }
     }

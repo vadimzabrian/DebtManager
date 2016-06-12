@@ -1,30 +1,106 @@
-﻿@model IEnumerable<DebtManager.Mvc.Models.PaymentVM>
+﻿@model DebtManager.Mvc.Models.PaymentsIndexVM
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Payments go here</h2>
+
+<button type="button" class="btn btn-success  pull-right" onclick="location.href='@Url.Action("Create", "Payments")'"><span class=" glyphicon glyphicon-plus"></span> Add</button>
 
 
-<table class="table table-striped table-bordered table-condensed table-hover">
-    <tbody>
-        <tr>
-            <th>Has payed</th>
-            <th>Has received</th>
-            <th>Amount</th>
-            <th>Reason</th>
-            <th>Date</th>
-        </tr>
-        @foreach (var p in Model)
-        {
+@if (Model.Payments.Any(p => Model.LoggedInUsername == p.PayerUsername && (p.Status == 0 || p.Status == 2)))
+{
+    <h2>Pending payments made BY you</h2>
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <tbody>
             <tr>
-                <td class="id" style="display: none;">@p.Id</td>
-                <td class="payer">@p.PayerName</td>
-                <td class="receiver">@p.ReceiverName</td>
-                <td class="amount">@p.Amount</td>
-                <td class="reason">@p.Reason</td>
-                <td class="date">@p.Date</td>
+                <th>Has received</th>
+                <th>Amount</th>
+                <th>Reason</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+            @foreach (var p in Model.Payments.Where(p => Model.LoggedInUsername == p.PayerUsername && (p.Status == 0 || p.Status == 2)))
+            {
+                <tr>
+                    <td class="id" style="display: none;">@p.Id</td>
+                    <td class="receiver">@p.ReceiverName</td>
+                    <td class="amount">@p.Amount</td>
+                    <td class="reason">@p.Reason</td>
+                    <td class="date">@p.Date</td>
+                    <td class="date">@p.StatusName</td>
+                    <td>
+                        @if (p.Status == 0)
+                        {
+                            @Html.ActionLink("Cancel", "Cancel", new { id = p.Id })
+                        }
+                        @if (p.Status == 2)
+                        {
+                            @Html.ActionLink("Resend", "Resend", new { id = p.Id }) @Html.ActionLink("Cancel", "Cancel", new { id = p.Id })
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@if (Model.Payments.Any(p => Model.LoggedInUsername == p.ReceiverUsername && p.Status == 0))
+{
+    <h2>Pending payments made FOR you</h2>
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <tbody>
+            <tr>
+                <th>Has payed</th>
+                <th>Amount</th>
+                <th>Reason</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            @foreach (var p in Model.Payments.Where(p => Model.LoggedInUsername == p.ReceiverUsername && p.Status == 0))
+            {
+                <tr>
+                    <td class="id" style="display: none;">@p.Id</td>
+                    <td class="payer">@p.PayerName</td>
+                    <td class="amount">@p.Amount</td>
+                    <td class="reason">@p.Reason</td>
+                    <td class="date">@p.Date</td>
+                    <td class="date">@p.StatusName</td>
+                    <td>
+                        @Html.ActionLink("Accept", "Accept", new { id = p.Id }) @Html.ActionLink("Reject", "Reject", new { id = p.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@if (Model.Payments.Any(p => p.Status == 1 || p.Status == 3))
+{
+    <h2>Accepted payments</h2>
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <tbody>
+            <tr>
+                <th>Has payed</th>
+                <th>Has received</th>
+                <th>Amount</th>
+                <th>Reason</th>
+                <th>Date</th>
+            </tr>
+            @foreach (var p in Model.Payments.Where(p => p.Status == 1 || p.Status == 3))
+            {
+                <tr>
+                    <td class="id" style="display: none;">@p.Id</td>
+                    <td class="payer">@p.PayerName</td>
+                    <td class="receiver">@p.ReceiverName</td>
+                    <td class="amount">@p.Amount</td>
+                    <td class="reason">@p.Reason</td>
+                    <td class="date">@p.Date</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

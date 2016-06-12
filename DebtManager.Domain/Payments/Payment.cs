@@ -1,4 +1,5 @@
 ﻿using DebtManager.Domain.Dtos;
+using DebtManager.Domain.Payments;
 using System;
 using Vadim.Common;
 
@@ -12,15 +13,68 @@ namespace DebtManager.Domain.Entities
         public int Amount { get; private set; }
         public DateTime Date { get; private set; }
         public string Reason { get; private set; }
+        public int Status { get; private set; }
 
-        private Payment() { }
+        private Payment()
+        {
+            this.Status = (int)PaymentStatus.Pending;
+        }
+
+        public void Accept(int actionInitiatorId)
+        {
+            #region validations
+            if (this.Status != (int)PaymentStatus.Pending) throw new Exception("Invalid operation. A payment can go to Active state only from Pending.");
+            if (this.Receiver.Id != actionInitiatorId) throw new Exception("User not authorized to perform the operation.");
+            #endregion
+
+            this.Status = (int)PaymentStatus.Active;
+        }
+
+        public void Reject(int actionInitiatorId)
+        {
+            #region validations
+            if (this.Status != (int)PaymentStatus.Pending) throw new Exception("Invalid operation. A payment can go to Rejected state only from Pending.");
+            if (this.Receiver.Id != actionInitiatorId) throw new Exception("User not authorized to perform the operation.");
+            #endregion
+
+            this.Status = (int)PaymentStatus.Rejected;
+        }
+
+        public void Resend(int actionInitiatorId)
+        {
+            #region validations
+            if (this.Status != (int)PaymentStatus.Rejected) throw new Exception("Invalid operation. A payment can be put back to Pending state only from Rejected.");
+            if (this.Payer.Id != actionInitiatorId) throw new Exception("User not authorized to perform the operation.");
+            #endregion
+
+            this.Status = (int)PaymentStatus.Pending;
+        }
+
+        public void Cancel(int actionInitiatorId)
+        {
+            #region validations
+            if (!(this.Status == (int)PaymentStatus.Pending || this.Status == (int)PaymentStatus.Rejected)) throw new Exception("Invalid operation. A payment can Canceled only when in Pending or Rejected state.");
+            if (this.Payer.Id != actionInitiatorId) throw new Exception("User not authorized to perform the operation.");
+            #endregion
+
+            this.Status = (int)PaymentStatus.Canceled;
+        }
+
+        public void Neutralize(PaymentDto newPaymentDto, int? actionInitiatorId = null)
+        {
+            #region validations
+            if (this.Status != (int)PaymentStatus.Active) throw new Exception("Invalid operation. A payment can go to Neutralized state only from Active.");
+            #endregion
+
+            this.Status = newPaymentDto.Status;
+        }
 
 
         public PaymentDto ToDto()
         {
             PaymentDto dto = new PaymentDto();
 
-            dto.Id = this.Id; 
+            dto.Id = this.Id;
             dto.PayerId = this.Payer != null ? this.Payer.Id : 0;
             dto.PayerName = this.Payer != null ? this.Payer.Name : String.Empty;
             dto.ReceiverId = this.Receiver != null ? this.Receiver.Id : 0;
@@ -28,6 +82,7 @@ namespace DebtManager.Domain.Entities
             dto.Amount = this.Amount;
             dto.Date = this.Date;
             dto.Reason = this.Reason;
+            dto.Status = this.Status;
 
             return dto;
         }
@@ -45,8 +100,23 @@ namespace DebtManager.Domain.Entities
             entity.Amount = dto.Amount;
             entity.Date = DateTime.Now;
             entity.Reason = dto.Reason;
+            entity.Status = dto.Status;
 
             return entity;
+        }
+
+        // ToDo - rafactor this shit out
+        public static string GetStatusNameFor(int p)
+        {
+            switch (p)
+            {
+                case 0: return "Pending";
+                case 1: return "Active";
+                case 2: return "Rejected";
+                case 3: return "Neutralized";
+                case 4: return "Canceled";
+                default: return String.Empty;
+            }
         }
     }
 }

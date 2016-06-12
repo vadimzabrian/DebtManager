@@ -1,5 +1,7 @@
 User login. Users are persons. Same entity.
 Confirm payment by second party.
+Refactor statusName
+Make client able to select which fields of the payment to receive /not recieve
 Settle payments.
 Private messaging between users.
 Friendlist.

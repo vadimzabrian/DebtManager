@@ -1,6 +1,7 @@
 ﻿using DebtManager.Mvc.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -16,24 +17,37 @@ namespace DebtManager.Mvc.Controllers
         // GET: Dashboard data
         public async Task<ActionResult> Index()
         {
-            IEnumerable<DebtVM> output = new List<DebtVM>();
+            IEnumerable<DebtVM> debts = new List<DebtVM>();
+            BalanceVM balance = null;
 
             var claimsPrincipal = User as ClaimsPrincipal;
 
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
-                    claimsPrincipal.FindFirst("access_token").Value);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", claimsPrincipal.FindFirst("access_token").Value);
 
-                HttpResponseMessage response = await client.GetAsync("http://localhost:58857/api/MinimizedDebts");
+                HttpResponseMessage response = await client.GetAsync(ConfigurationManager.AppSettings["DebtManagerApiUrl"] + "/MinimizedDebts");
                 if (response.IsSuccessStatusCode)
                 {
                     var debtsData = await response.Content.ReadAsStringAsync();
-                    output = JsonConvert.DeserializeObject<IEnumerable<DebtVM>>(debtsData);
+                    debts = JsonConvert.DeserializeObject<IEnumerable<DebtVM>>(debtsData);
                 }
             }
 
-            return View(output);
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", claimsPrincipal.FindFirst("access_token").Value);
+
+
+                HttpResponseMessage responseBalance = await client.GetAsync(ConfigurationManager.AppSettings["DebtManagerApiUrl"] + "/Balance");
+                if (responseBalance.IsSuccessStatusCode)
+                {
+                    var balanceString = await responseBalance.Content.ReadAsStringAsync();
+                    balance = JsonConvert.DeserializeObject<BalanceVM>(balanceString);
+                }
+            }
+
+            return View(new DashboardVM { Debts = debts, Balance = balance, LoggedInUsername = claimsPrincipal.FindFirst("sub").Value });
         }
     }
 }

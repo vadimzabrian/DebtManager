@@ -19,7 +19,7 @@ namespace DebtManager.Mvc.Controllers
         // GET: Payments
         public async Task<ActionResult> Index()
         {
-            IEnumerable<PaymentVM> output = new List<PaymentVM>();
+            IEnumerable<PaymentVM> payments = new List<PaymentVM>();
 
             var claimsPrincipal = User as ClaimsPrincipal;
 
@@ -31,12 +31,12 @@ namespace DebtManager.Mvc.Controllers
                 HttpResponseMessage response = await client.GetAsync(ConfigurationManager.AppSettings["DebtManagerApiUrl"] + "/Payments");
                 if (response.IsSuccessStatusCode)
                 {
-                    var payment = await response.Content.ReadAsStringAsync();
-                    output = JsonConvert.DeserializeObject<IEnumerable<PaymentVM>>(payment);
+                    var paymentsString = await response.Content.ReadAsStringAsync();
+                    payments = JsonConvert.DeserializeObject<IEnumerable<PaymentVM>>(paymentsString);
                 }
             }
 
-            return View(output);
+            return View(new PaymentsIndexVM { Payments = payments, LoggedInUsername = claimsPrincipal.FindFirst("sub").Value });
         }
 
         // Post: Payments
@@ -59,7 +59,8 @@ namespace DebtManager.Mvc.Controllers
             }
 
             var model = new PaymentVM();
-            model.Users = new SelectList(users.Select(u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() }), "Value", "Text");
+            model.Users = new SelectList(users.Where(u=> u.Username != claimsPrincipal.FindFirst("sub").Value)
+                .Select(u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() }), "Value", "Text");
 
             return View(model);
         }
@@ -68,7 +69,6 @@ namespace DebtManager.Mvc.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(PaymentVM payment)
         {
-
             var claimsPrincipal = User as ClaimsPrincipal;
 
             using (var client = new HttpClient())
@@ -86,6 +86,102 @@ namespace DebtManager.Mvc.Controllers
 
                 // New code:
                 HttpResponseMessage response = await client.PostAsync(ConfigurationManager.AppSettings["DebtManagerApiUrl"] + "/Payments", content);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        // Post: Payments
+        [HttpGet]
+        public async Task<ActionResult> Accept(int id)
+        {
+            var claimsPrincipal = User as ClaimsPrincipal;
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
+                    claimsPrincipal.FindFirst("access_token").Value);
+
+                var content = new FormUrlEncodedContent(new[] 
+                    {
+                        new KeyValuePair<string, string>("Id", id.ToString()),
+                        new KeyValuePair<string, string>("Action", "accept")
+                    });
+
+                // New code:
+                HttpResponseMessage response = await client.PutAsync(ConfigurationManager.AppSettings["DebtManagerApiUrl"] + "/Payments", content);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        // Post: Payments
+        [HttpGet]
+        public async Task<ActionResult> Reject(int id)
+        {
+            var claimsPrincipal = User as ClaimsPrincipal;
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
+                    claimsPrincipal.FindFirst("access_token").Value);
+
+                var content = new FormUrlEncodedContent(new[] 
+                    {
+                        new KeyValuePair<string, string>("Id", id.ToString()),
+                        new KeyValuePair<string, string>("Action", "reject")
+                    });
+
+                // New code:
+                HttpResponseMessage response = await client.PutAsync(ConfigurationManager.AppSettings["DebtManagerApiUrl"] + "/Payments", content);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        // Post: Payments
+        [HttpGet]
+        public async Task<ActionResult> Resend(int id)
+        {
+            var claimsPrincipal = User as ClaimsPrincipal;
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
+                    claimsPrincipal.FindFirst("access_token").Value);
+
+                var content = new FormUrlEncodedContent(new[] 
+                    {
+                        new KeyValuePair<string, string>("Id", id.ToString()),
+                        new KeyValuePair<string, string>("Action", "resend")
+                    });
+
+                // New code:
+                HttpResponseMessage response = await client.PutAsync(ConfigurationManager.AppSettings["DebtManagerApiUrl"] + "/Payments", content);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        // Post: Payments
+        [HttpGet]
+        public async Task<ActionResult> Cancel(int id)
+        {
+            var claimsPrincipal = User as ClaimsPrincipal;
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
+                    claimsPrincipal.FindFirst("access_token").Value);
+
+                var content = new FormUrlEncodedContent(new[] 
+                    {
+                        new KeyValuePair<string, string>("Id", id.ToString()),
+                        new KeyValuePair<string, string>("Action", "cancel")
+                    });
+
+                // New code:
+                HttpResponseMessage response = await client.PutAsync(ConfigurationManager.AppSettings["DebtManagerApiUrl"] + "/Payments", content);
             }
 
             return RedirectToAction("Index");

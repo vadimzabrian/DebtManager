@@ -26,6 +26,30 @@ namespace DebtManager.OAuth
                     Username = "alice",
                     Password = "secret",
                     Subject = "2"
+                },
+                new InMemoryUser
+                {
+                    Username = "adrian.moroi",
+                    Subject = "adrian.moroi",
+                    Password = "secret"
+                },
+                new InMemoryUser
+                {
+                    Username = "bogdan.dolhascu",
+                    Subject = "bogdan.dolhascu",
+                    Password = "secret"
+                },
+                new InMemoryUser
+                {
+                    Username = "ovidiu.petrache",
+                    Subject = "ovidiu.petrache",
+                    Password = "secret"
+                },
+                new InMemoryUser
+                {
+                    Username = "vadim.zabrian",
+                    Subject = "vadim.zabrian",
+                    Password = "secret"
                 }
             };
         }

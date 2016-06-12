@@ -182,9 +182,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BalanceVM.cs" />
+    <Compile Include="Models\DashboardVM.cs" />
     <Compile Include="Models\DebtVM.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\PaymentsIndexVM.cs" />
     <Compile Include="Models\PaymentVM.cs" />
     <Compile Include="Models\UserVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

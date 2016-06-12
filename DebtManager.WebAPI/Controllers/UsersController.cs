@@ -2,6 +2,7 @@
 using DebtManager.Domain.Entities;
 using DebtManager.WebAPI.App_Start;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -15,6 +16,12 @@ namespace DebtManager.WebAPI.Controllers
         public IEnumerable<User> Get()
         {
             return DependencyResolver.Resolve<IUsersProvider>().Execute();
+        }
+
+        // GET api/values
+        public User Get(string username)
+        {
+            return DependencyResolver.Resolve<IUsersProvider>().Execute().FirstOrDefault(u=> u.Username == username);
         }
     }
 }
