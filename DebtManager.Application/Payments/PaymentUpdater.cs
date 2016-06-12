@@ -23,9 +23,10 @@ namespace DebtManager.Application.Payments
         public void Accept(int paymentId, string actionInitializerUsername)
         {
             var actionInitializer = _dbRepository.GetAll<User>().FirstOrDefault(p => p.Username == actionInitializerUsername);
-            var existingPayment = _dbRepository.GetAll<Payment>(new[] { "Payer", "Receiver" }).FirstOrDefault(p => p.Id == paymentId);
+            var payments = _dbRepository.GetAll<Payment>(new[] { "Payer", "Receiver" }).ToList();
+            var existingPayment = payments.FirstOrDefault(p => p.Id == paymentId);
 
-            existingPayment.Accept(actionInitializer.Id, _domainBalanceCalculator, _dbRepository.GetAll<Payment>());
+            existingPayment.Accept(actionInitializer.Id, _domainBalanceCalculator, payments.AsQueryable());
             _dbRepository.PersistChanges();
         }
 

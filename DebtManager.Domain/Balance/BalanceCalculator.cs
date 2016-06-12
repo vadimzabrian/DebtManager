@@ -1,5 +1,6 @@
 ﻿using DebtManager.Domain.DebtCalculations;
 using DebtManager.Domain.Entities;
+using DebtManager.Domain.Payments;
 using System.Linq;
 
 namespace DebtManager.Domain
@@ -15,6 +16,8 @@ namespace DebtManager.Domain
 
         public Balance ExecuteFor(int userId, IQueryable<Payment> payments)
         {
+            payments = payments.Where(p => p.Status == (int)PaymentStatus.Active);
+
             var debts = _debtCalculatorForOnePerson.Execute(userId, payments);
 
             var amountUserMustPay = debts.Where(d => d.MustPayId == userId).Sum(d => d.Amount);
