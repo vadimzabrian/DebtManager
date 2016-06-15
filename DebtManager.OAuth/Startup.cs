@@ -1,6 +1,7 @@
 ﻿using IdentityServer3.Core.Configuration;
 using Microsoft.Owin;
 using Owin;
+using System.Configuration;
 using System.Security.Cryptography.X509Certificates;
 
 [assembly: OwinStartup(typeof(DebtManager.OAuth.Startup))]
@@ -18,7 +19,7 @@ namespace DebtManager.OAuth
                             .UseInMemoryScopes(Scopes.Get())
                             .UseInMemoryUsers(Users.Get()),
 
-                SigningCertificate = new X509Certificate2(@"I:\Dropbox\Programare\Proiecte\DebtManager\DebtManager.OAuth\bin\VadimCertificate.pfx", "vadimpassword"),
+                SigningCertificate = new X509Certificate2(ConfigurationManager.AppSettings["CertificatePath"], ConfigurationManager.AppSettings["CertificatePassword"]),
 
                 RequireSsl = false
             };
