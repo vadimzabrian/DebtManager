@@ -16,6 +16,7 @@
                 <th>Amount</th>
                 <th>Reason</th>
                 <th>Date</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
             @foreach (var p in Model.Payments.Where(p => Model.LoggedInUsername == p.ReceiverUsername && p.Status == 0))
@@ -26,9 +27,11 @@
                     <td class="amount">@p.Amount</td>
                     <td class="reason">@p.Reason</td>
                     <td class="date">@p.Date</td>
+                    <td class ="status">@p.StatusName</td>
                     <td>
-                        <button type="button" class="btn btn-success  pull-left" onclick="location.href='@Url.Action("Confirm", "Payments", new { id = p.Id })'"><span class="glyphicon glyphicon-ok"></span> Confirm</button>
                         <button type="button" class="btn btn-danger  pull-right" onclick="location.href='@Url.Action("Reject", "Payments", new { id = p.Id })'"><span class="glyphicon glyphicon-remove"></span> Reject</button>
+
+                        <button type="button" class="btn btn-success  pull-right" onclick="location.href='@Url.Action("Confirm", "Payments", new { id = p.Id })'"><span class="glyphicon glyphicon-ok"></span> Confirm</button>
                     </td>
                 </tr>
             }
@@ -46,6 +49,7 @@
                 <th>Amount</th>
                 <th>Reason</th>
                 <th>Date</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
             @foreach (var p in Model.Payments.Where(p => Model.LoggedInUsername == p.PayerUsername && (p.Status == 0 || p.Status == 2)))
@@ -56,14 +60,15 @@
                     <td class="amount">@p.Amount</td>
                     <td class="reason">@p.Reason</td>
                     <td class="date">@p.Date</td>
+                    <td class="status">@p.StatusName</td>
                     <td>
                         @if (p.Status == 0)
                         {
-                            @Html.ActionLink("Delete", "Delete", new { id = p.Id })
+                            <button type="button" class="btn btn-danger pull-right" onclick="location.href='@Url.Action("Delete", "Payments", new { id = p.Id })'"><span class="glyphicon glyphicon-remove"></span> Delete</button>
                         }
                         @if (p.Status == 2)
                         {
-                            @Html.ActionLink("Resend", "Resend", new { id = p.Id }) @Html.ActionLink("Delete", "Delete", new { id = p.Id })
+                            <button type="button" class="btn  pull-right" onclick="location.href='@Url.Action("Resend", "Payments", new { id = p.Id })'"><span class="glyphicon glyphicon-envelope"></span> Resend</button>
                         }
                     </td>
                 </tr>

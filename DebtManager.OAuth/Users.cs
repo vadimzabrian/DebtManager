@@ -31,29 +31,25 @@ namespace DebtManager.OAuth
                 {
                     Username = "adrian.moroi",
                     Subject = "adrian.moroi",
-                    Password = "password"
+                    Password = "adi19hero"
                 },
                 new InMemoryUser
                 {
                     Username = "bogdan.dolhascu",
                     Subject = "bogdan.dolhascu",
-                    Password = "password"
+                    Password = "jmenr1"
                 },
                 new InMemoryUser
                 {
                     Username = "ovidiu.petrache",
                     Subject = "ovidiu.petrache",
-                    Password = "password"
+                    Password = "cop13"
                 },
                 new InMemoryUser
                 {
                     Username = "vadim.zabrian",
                     Subject = "vadim.zabrian",
-                    Password = "password",
-                    Claims = new []
-                    {
-                        new Claim(Constants.ClaimTypes.Subject, "sub-vadim")
-                    }
+                    Password = "rtl"
                 }
             };
         }

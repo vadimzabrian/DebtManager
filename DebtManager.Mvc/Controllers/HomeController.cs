@@ -19,22 +19,30 @@ namespace DebtManager.Mvc.Controllers
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
-            var client = new OAuth2Client(new Uri("http://localhost:24837/connect/token"), "socialnetwork", "secret");
-            var requestedResponse = client.RequestAccessTokenUserName(username, password, "openid profile offline_access");
+            try
+            {
+
+                var client = new OAuth2Client(new Uri("http://localhost:24837/connect/token"), "socialnetwork", "secret");
+                var requestedResponse = client.RequestAccessTokenUserName(username, password, "openid profile offline_access");
 
 
-            var claims = new[]
+                var claims = new[]
             {
                 new Claim("access_token", requestedResponse.AccessToken),
                 new Claim("refresh_token", requestedResponse.RefreshToken),
                 new Claim(ClaimTypes.NameIdentifier, username)
             };
 
-            var claimsIdentity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
+                var claimsIdentity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
 
-            HttpContext.GetOwinContext().Authentication.SignIn(claimsIdentity);
+                HttpContext.GetOwinContext().Authentication.SignIn(claimsIdentity);
 
-            return RedirectToAction("Index", "Dashboard");
+                return RedirectToAction("Index", "Dashboard");
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         public ActionResult Refresh(string username, string password)
