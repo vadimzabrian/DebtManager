@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 namespace DebtManager.Mvc.Models
 {
@@ -11,6 +12,7 @@ namespace DebtManager.Mvc.Models
         public int ReceiverId { get; set; }
         public string ReceiverName { get; set; }
         public string ReceiverUsername { get; set; }
+        [Range(1, 10000)]
         public int Amount { get; set; }
         public DateTime Date { get; set; }
         public string Reason { get; set; }

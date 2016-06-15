@@ -27,12 +27,12 @@ namespace DebtManager.Domain.DebtCalculations
 
             if (payments != null)
             {
-                debt.Amount -= payments.Where(p => p.Payer.Id == user1Id && p.Receiver.Id == user2Id && p.Status == (int)PaymentStatus.Active)
+                debt.Amount -= payments.Where(p => p.Payer.Id == user1Id && p.Receiver.Id == user2Id && p.Status == (int)PaymentStatus.Confirmed)
                     .Select(l => l.Amount)
                     .DefaultIfEmpty(0)
                     .Sum();
 
-                debt.Amount += payments.Where(p => p.Payer.Id == user2Id && p.Receiver.Id == user1Id && p.Status == (int)PaymentStatus.Active)
+                debt.Amount += payments.Where(p => p.Payer.Id == user2Id && p.Receiver.Id == user1Id && p.Status == (int)PaymentStatus.Confirmed)
                     .Select(l => l.Amount)
                     .DefaultIfEmpty(0)
                     .Sum();

@@ -1,30 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
+using System;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
+using Thinktecture.IdentityModel.Clients;
 
 namespace DebtManager.Mvc.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult Login()
         {
             return View();
         }
 
-        public ActionResult About()
+        [HttpPost]
+        public ActionResult Login(string username, string password)
         {
-            ViewBag.Message = "Your application description page.";
+            var client = new OAuth2Client(new Uri("http://localhost:24837/connect/token"), "socialnetwork", "secret");
+            var requestedResponse = client.RequestAccessTokenUserName(username, password, "openid profile offline_access");
 
-            return View();
+
+            var claims = new[]
+            {
+                new Claim("access_token", requestedResponse.AccessToken),
+                new Claim("refresh_token", requestedResponse.RefreshToken),
+                new Claim(ClaimTypes.NameIdentifier, username)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
+
+            HttpContext.GetOwinContext().Authentication.SignIn(claimsIdentity);
+
+            return RedirectToAction("Index", "Dashboard");
         }
 
-        public ActionResult Contact()
+        public ActionResult Refresh(string username, string password)
         {
-            ViewBag.Message = "Your contact page.";
+            var claimsPrincipal = User as ClaimsPrincipal;
 
-            return View();
+            var client = new OAuth2Client(new Uri("http://localhost:24837/connect/token"), "socialnetwork", "secret");
+            var requestedResponse = client.RequestAccessTokenRefreshToken(claimsPrincipal.FindFirst("refresh_token").Value);
+
+            var manager = HttpContext.GetOwinContext().Authentication;
+
+            var refreshIdentity = new ClaimsIdentity(User.Identity);
+
+            refreshIdentity.RemoveClaim(refreshIdentity.FindFirst("access_token"));
+            refreshIdentity.RemoveClaim(refreshIdentity.FindFirst("refresh_token"));
+
+            refreshIdentity.AddClaim(new Claim("access_token", requestedResponse.AccessToken));
+            refreshIdentity.AddClaim(new Claim("refresh_token", requestedResponse.RefreshToken));
+
+            manager.AuthenticationResponseGrant = new AuthenticationResponseGrant(new ClaimsPrincipal(refreshIdentity), new AuthenticationProperties { IsPersistent = true });
+
+            return RedirectToAction("Index", "Dashboard");
         }
     }
 }

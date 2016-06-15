@@ -20,13 +20,13 @@ namespace DebtManager.Application.Payments
             if (_domainBalanceCalculator == null) throw new Exception("_domainBalanceCalculator is null");
         }
 
-        public void Accept(int paymentId, string actionInitializerUsername)
+        public void Confirm(int paymentId, string actionInitializerUsername)
         {
             var actionInitializer = _dbRepository.GetAll<User>().FirstOrDefault(p => p.Username == actionInitializerUsername);
             var payments = _dbRepository.GetAll<Payment>(new[] { "Payer", "Receiver" }).ToList();
             var existingPayment = payments.FirstOrDefault(p => p.Id == paymentId);
 
-            existingPayment.Accept(actionInitializer.Id, _domainBalanceCalculator, payments.AsQueryable());
+            existingPayment.Confirm(actionInitializer.Id, _domainBalanceCalculator, payments.AsQueryable());
             _dbRepository.PersistChanges();
         }
 
@@ -40,12 +40,12 @@ namespace DebtManager.Application.Payments
             _dbRepository.PersistChanges();
         }
 
-        public void Cancel(int paymentId, string actionInitializerUsername)
+        public void Delete(int paymentId, string actionInitializerUsername)
         {
             var actionInitializer = _dbRepository.GetAll<User>().FirstOrDefault(p => p.Username == actionInitializerUsername);
             var existingPayment = _dbRepository.GetAll<Payment>().FirstOrDefault(p => p.Id == paymentId);
 
-            existingPayment.Cancel(actionInitializer.Id);
+            existingPayment.Delete(actionInitializer.Id);
 
             _dbRepository.PersistChanges();
         }

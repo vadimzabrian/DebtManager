@@ -36,7 +36,7 @@ namespace DebtManager.Mvc.Controllers
                 }
             }
 
-            return View(new PaymentsIndexVM { Payments = payments, LoggedInUsername = claimsPrincipal.FindFirst("sub").Value });
+            return View(new PaymentsIndexVM { Payments = payments, LoggedInUsername = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value });
         }
 
         // Post: Payments
@@ -59,7 +59,7 @@ namespace DebtManager.Mvc.Controllers
             }
 
             var model = new PaymentVM();
-            model.Users = new SelectList(users.Where(u=> u.Username != claimsPrincipal.FindFirst("sub").Value)
+            model.Users = new SelectList(users.Where(u => u.Username != claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value)
                 .Select(u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() }), "Value", "Text");
 
             return View(model);
@@ -93,7 +93,7 @@ namespace DebtManager.Mvc.Controllers
 
         // Post: Payments
         [HttpGet]
-        public async Task<ActionResult> Accept(int id)
+        public async Task<ActionResult> Confirm(int id)
         {
             var claimsPrincipal = User as ClaimsPrincipal;
 
@@ -105,7 +105,7 @@ namespace DebtManager.Mvc.Controllers
                 var content = new FormUrlEncodedContent(new[] 
                     {
                         new KeyValuePair<string, string>("Id", id.ToString()),
-                        new KeyValuePair<string, string>("Action", "accept")
+                        new KeyValuePair<string, string>("Action", "confirm")
                     });
 
                 // New code:
@@ -165,7 +165,7 @@ namespace DebtManager.Mvc.Controllers
 
         // Post: Payments
         [HttpGet]
-        public async Task<ActionResult> Cancel(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             var claimsPrincipal = User as ClaimsPrincipal;
 
@@ -177,7 +177,7 @@ namespace DebtManager.Mvc.Controllers
                 var content = new FormUrlEncodedContent(new[] 
                     {
                         new KeyValuePair<string, string>("Id", id.ToString()),
-                        new KeyValuePair<string, string>("Action", "cancel")
+                        new KeyValuePair<string, string>("Action", "delete")
                     });
 
                 // New code:

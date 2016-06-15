@@ -15,7 +15,11 @@ namespace DebtManager.OAuth
                 new Scope
                 {
                     Name = "read",
-                    DisplayName = "Read user data"
+                    DisplayName = "Read user data",
+                    Claims = new List<ScopeClaim>
+                    {
+                        new ScopeClaim("sub", true)
+                    }
                 }
             };
         }

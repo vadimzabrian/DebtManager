@@ -20,7 +20,7 @@ namespace DebtManager.Application
 
         public Balance ExecuteFor(string username)
         {
-            var payments = _dbRepository.GetAll<Payment>().Where(p => p.Status == (int)PaymentStatus.Active);
+            var payments = _dbRepository.GetAll<Payment>().Where(p => p.Status == (int)PaymentStatus.Confirmed);
             var user = _dbRepository.GetAll<User>().First(u => u.Username == username);
 
             return _domainBalanceCalculator.ExecuteFor(user.Id, payments);

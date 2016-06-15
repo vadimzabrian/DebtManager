@@ -24,14 +24,14 @@ namespace DebtManager.Domain.Entities
             this.Status = (int)PaymentStatus.Pending;
         }
 
-        public void Accept(int actionInitiatorId, IBalanceCalculator balanceCalculator, IQueryable<Payment> payments)
+        public void Confirm(int actionInitiatorId, IBalanceCalculator balanceCalculator, IQueryable<Payment> payments)
         {
             #region validations
             if (this.Status != (int)PaymentStatus.Pending) throw new Exception("Invalid operation. A payment can go to Active state only from Pending.");
             if (this.Receiver.Id != actionInitiatorId) throw new Exception("User not authorized to perform the operation.");
             #endregion
 
-            this.Status = (int)PaymentStatus.Active;
+            this.Status = (int)PaymentStatus.Confirmed;
             this.AcceptedDate = DateTime.UtcNow;
 
             this.PayerBalance = balanceCalculator.ExecuteFor(this.Payer.Id, payments).GetBalance();
@@ -58,20 +58,20 @@ namespace DebtManager.Domain.Entities
             this.Status = (int)PaymentStatus.Pending;
         }
 
-        public void Cancel(int actionInitiatorId)
+        public void Delete(int actionInitiatorId)
         {
             #region validations
             if (!(this.Status == (int)PaymentStatus.Pending || this.Status == (int)PaymentStatus.Rejected)) throw new Exception("Invalid operation. A payment can Canceled only when in Pending or Rejected state.");
             if (this.Payer.Id != actionInitiatorId) throw new Exception("User not authorized to perform the operation.");
             #endregion
 
-            this.Status = (int)PaymentStatus.Canceled;
+            this.Status = (int)PaymentStatus.Delete;
         }
 
         public void Neutralize(PaymentDto newPaymentDto, int? actionInitiatorId = null)
         {
             #region validations
-            if (this.Status != (int)PaymentStatus.Active) throw new Exception("Invalid operation. A payment can go to Neutralized state only from Active.");
+            if (this.Status != (int)PaymentStatus.Confirmed) throw new Exception("Invalid operation. A payment can go to Neutralized state only from Active.");
             #endregion
 
             this.Status = newPaymentDto.Status;

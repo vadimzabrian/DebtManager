@@ -34,7 +34,7 @@ namespace DebtManager.WebAPI.Controllers
 
             #endregion
 
-            var debtsForAllUsers = debtCalculatorForMultiplePeople.Execute(paymentsProvider.Execute().Where(p => p.Status == (int)PaymentStatus.Active));
+            var debtsForAllUsers = debtCalculatorForMultiplePeople.Execute(paymentsProvider.Execute().Where(p => p.Status == (int)PaymentStatus.Confirmed));
 
             var minimizedDebtsForAllUsers = pairMinimizer.Execute(debtsForAllUsers.ToList());
 

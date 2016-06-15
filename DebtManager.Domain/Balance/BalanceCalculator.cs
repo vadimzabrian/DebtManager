@@ -16,7 +16,7 @@ namespace DebtManager.Domain
 
         public Balance ExecuteFor(int userId, IQueryable<Payment> payments)
         {
-            payments = payments.Where(p => p.Status == (int)PaymentStatus.Active);
+            payments = payments.Where(p => p.Status == (int)PaymentStatus.Confirmed);
 
             var debts = _debtCalculatorForOnePerson.Execute(userId, payments);
 

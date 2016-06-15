@@ -47,7 +47,7 @@ namespace DebtManager.Mvc.Controllers
                 }
             }
 
-            return View(new DashboardVM { Debts = debts, Balance = balance, LoggedInUsername = claimsPrincipal.FindFirst("sub").Value });
+            return View(new DashboardVM { Debts = debts, Balance = balance, LoggedInUsername = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value });
         }
     }
 }

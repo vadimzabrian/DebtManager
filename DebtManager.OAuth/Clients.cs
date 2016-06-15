@@ -1,6 +1,7 @@
 ﻿using IdentityServer3.Core;
 using IdentityServer3.Core.Models;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace DebtManager.OAuth
 {
@@ -23,6 +24,8 @@ namespace DebtManager.OAuth
                     AllowedScopes = new List<string>
                     {
                         Constants.StandardScopes.OpenId,
+                        Constants.StandardScopes.Profile,
+                        Constants.StandardScopes.OfflineAccess,
                         "read"
                     },
                     Enabled = true

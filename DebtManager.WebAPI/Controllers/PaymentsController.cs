@@ -23,7 +23,7 @@ namespace DebtManager.WebAPI.Controllers
         public IEnumerable<PaymentDto> Get()
         {
             var claimsPrincipal = User as ClaimsPrincipal;
-            var username = claimsPrincipal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var username = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             return DependencyResolver.Resolve<PaymentsForUser_Query>().ExecuteFor(username).ToArray();
         }
@@ -34,7 +34,7 @@ namespace DebtManager.WebAPI.Controllers
         public HttpResponseMessage Post(PaymentDto payment)
         {
             var claimsPrincipal = User as ClaimsPrincipal;
-            var username = claimsPrincipal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var username = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value;
             payment.PayerUsername = username;
 
             var result = DependencyResolver.Resolve<IPaymentCreator>().Execute(payment);
@@ -49,11 +49,11 @@ namespace DebtManager.WebAPI.Controllers
         public HttpResponseMessage Put(PaymentPutModel model)
         {
             var claimsPrincipal = User as ClaimsPrincipal;
-            var username = claimsPrincipal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var username = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            if (model.Action == "accept")
+            if (model.Action == "confirm")
             {
-                DependencyResolver.Resolve<PaymentUpdater>().Accept(model.Id, username);
+                DependencyResolver.Resolve<PaymentUpdater>().Confirm(model.Id, username);
             }
 
             if (model.Action == "reject")
@@ -61,9 +61,9 @@ namespace DebtManager.WebAPI.Controllers
                 DependencyResolver.Resolve<PaymentUpdater>().Reject(model.Id, username);
             }
 
-            if (model.Action == "cancel")
+            if (model.Action == "delete")
             {
-                DependencyResolver.Resolve<PaymentUpdater>().Cancel(model.Id, username);
+                DependencyResolver.Resolve<PaymentUpdater>().Delete(model.Id, username);
             }
 
             if (model.Action == "resend")

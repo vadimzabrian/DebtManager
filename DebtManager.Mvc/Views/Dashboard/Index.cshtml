@@ -3,16 +3,26 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Dashboard</h2>
+<h3 class="pull-left">Dashboard</h3>
+<br />
+<br />
+<br />
 
-Current balance:
+
 @if (@Model.Balance.MustPayAmount.HasValue)
 {
-    <span>You must pay a total of </span> @Model.Balance.MustPayAmount
+    <div><span>Current balance: You must pay a total of </span> @Model.Balance.MustPayAmount</div>
 }
 @if (@Model.Balance.MustReceiveAmount.HasValue)
 {
-    <span>You must receive a total of</span> @Model.Balance.MustReceiveAmount
+    <div>
+        <span>Current balance: You must receive a total of</span> @Model.Balance.MustReceiveAmount
+    </div>
+}
+@if (!@Model.Balance.MustReceiveAmount.HasValue && !@Model.Balance.MustPayAmount.HasValue)
+{<div>
+        <span>Current balance: Clean. You owe nothing and nothing is owed to you.</span>
+    </div>
 }
 
 

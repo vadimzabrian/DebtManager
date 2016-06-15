@@ -6,6 +6,35 @@
 
 <button type="button" class="btn btn-success  pull-right" onclick="location.href='@Url.Action("Create", "Payments")'"><span class=" glyphicon glyphicon-plus"></span> Add</button>
 
+@if (Model.Payments.Any(p => Model.LoggedInUsername == p.ReceiverUsername && p.Status == 0))
+{
+    <h2>Pending payments made TO / FOR you</h2>
+    <table class="table table-striped table-bordered table-condensed table-hover">
+        <tbody>
+            <tr>
+                <th>by</th>
+                <th>Amount</th>
+                <th>Reason</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+            @foreach (var p in Model.Payments.Where(p => Model.LoggedInUsername == p.ReceiverUsername && p.Status == 0))
+            {
+                <tr>
+                    <td class="id" style="display: none;">@p.Id</td>
+                    <td class="payer">@p.PayerName</td>
+                    <td class="amount">@p.Amount</td>
+                    <td class="reason">@p.Reason</td>
+                    <td class="date">@p.Date</td>
+                    <td>
+                        <button type="button" class="btn btn-success  pull-left" onclick="location.href='@Url.Action("Confirm", "Payments", new { id = p.Id })'"><span class="glyphicon glyphicon-ok"></span> Confirm</button>
+                        <button type="button" class="btn btn-danger  pull-right" onclick="location.href='@Url.Action("Reject", "Payments", new { id = p.Id })'"><span class="glyphicon glyphicon-remove"></span> Reject</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @if (Model.Payments.Any(p => Model.LoggedInUsername == p.PayerUsername && (p.Status == 0 || p.Status == 2)))
 {
@@ -17,7 +46,6 @@
                 <th>Amount</th>
                 <th>Reason</th>
                 <th>Date</th>
-                <th>Status</th>
                 <th>Actions</th>
             </tr>
             @foreach (var p in Model.Payments.Where(p => Model.LoggedInUsername == p.PayerUsername && (p.Status == 0 || p.Status == 2)))
@@ -28,15 +56,14 @@
                     <td class="amount">@p.Amount</td>
                     <td class="reason">@p.Reason</td>
                     <td class="date">@p.Date</td>
-                    <td class="date">@p.StatusName</td>
                     <td>
                         @if (p.Status == 0)
                         {
-                            @Html.ActionLink("Cancel", "Cancel", new { id = p.Id })
+                            @Html.ActionLink("Delete", "Delete", new { id = p.Id })
                         }
                         @if (p.Status == 2)
                         {
-                            @Html.ActionLink("Resend", "Resend", new { id = p.Id }) @Html.ActionLink("Cancel", "Cancel", new { id = p.Id })
+                            @Html.ActionLink("Resend", "Resend", new { id = p.Id }) @Html.ActionLink("Delete", "Delete", new { id = p.Id })
                         }
                     </td>
                 </tr>
@@ -45,42 +72,11 @@
     </table>
 }
 
-
-@if (Model.Payments.Any(p => Model.LoggedInUsername == p.ReceiverUsername && p.Status == 0))
-{
-    <h2>Pending payments made TO / FOR you</h2>
-    <table class="table table-striped table-bordered table-condensed table-hover">
-        <tbody>
-            <tr>
-                <th>by</th>
-                <th>Amount</th>
-                <th>Reason</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            @foreach (var p in Model.Payments.Where(p => Model.LoggedInUsername == p.ReceiverUsername && p.Status == 0))
-            {
-                <tr>
-                    <td class="id" style="display: none;">@p.Id</td>
-                    <td class="payer">@p.PayerName</td>
-                    <td class="amount">@p.Amount</td>
-                    <td class="reason">@p.Reason</td>
-                    <td class="date">@p.Date</td>
-                    <td class="date">@p.StatusName</td>
-                    <td>
-                        @Html.ActionLink("Accept", "Accept", new { id = p.Id }) @Html.ActionLink("Reject", "Reject", new { id = p.Id })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
 
 
 @if (Model.Payments.Any(p => p.Status == 1 || p.Status == 3))
 {
-    <h2>Accepted payments</h2>
+    <h2>Confirmed payments</h2>
     <table class="table table-striped table-bordered table-condensed table-hover">
         <tbody>
             <tr>
@@ -94,8 +90,6 @@
             {
                 <tr>
                     <td class="id" style="display: none;">@p.Id</td>
-                    @*<td class="payer">@p.PayerName</td>
-                        <td class="receiver">@p.ReceiverName</td>*@
                     <td>
                         @if (Model.LoggedInUsername == p.ReceiverUsername)
                         { @p.PayerName <span>has paid to/for you</span> }

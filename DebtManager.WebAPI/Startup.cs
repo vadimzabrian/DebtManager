@@ -11,7 +11,7 @@ namespace DebtManager.WebAPI
         {
             app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
             {
-                Authority = "http://localhost:24837"
+                Authority = "http://localhost:24837"                
             });
         }
     }
