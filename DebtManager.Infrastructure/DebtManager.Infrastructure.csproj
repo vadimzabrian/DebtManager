@@ -68,14 +68,30 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DbScripts\001_CreateDatabase.sql" />
-    <Content Include="DbScripts\002_PopulateDb.sql" />
-    <Content Include="DbScripts\003_TransformDebtsIntoPayments.sql" />
-    <Content Include="DbScripts\004_DeleteDebtsTable.sql" />
-    <Content Include="DbScripts\005_Add_Username_to_Users.sql" />
-    <Content Include="DbScripts\006_Add_Status_to_Payments.sql" />
-    <Content Include="DbScripts\007_Add_AcceptedDate_to_Payments.sql" />
-    <Content Include="DbScripts\008_Add_Balance_field_to_Payments.sql" />
+    <Content Include="DbScripts\001_CreateDatabase.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DbScripts\002_PopulateDb.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DbScripts\003_TransformDebtsIntoPayments.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DbScripts\004_DeleteDebtsTable.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DbScripts\005_Add_Username_to_Users.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DbScripts\006_Add_Status_to_Payments.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DbScripts\007_Add_AcceptedDate_to_Payments.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DbScripts\008_Add_Balance_field_to_Payments.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DebtManager.Application\DebtManager.Application.csproj">
