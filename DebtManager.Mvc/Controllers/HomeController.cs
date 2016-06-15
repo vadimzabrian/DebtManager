@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using System;
+using System.Configuration;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
@@ -22,7 +23,7 @@ namespace DebtManager.Mvc.Controllers
             try
             {
 
-                var client = new OAuth2Client(new Uri("http://localhost:24837/connect/token"), "socialnetwork", "secret");
+                var client = new OAuth2Client(new Uri(ConfigurationManager.AppSettings["IdentityServerUrl"] +  "/connect/token"), "socialnetwork", "secret");
                 var requestedResponse = client.RequestAccessTokenUserName(username, password, "openid profile offline_access");
 
 
@@ -49,7 +50,7 @@ namespace DebtManager.Mvc.Controllers
         {
             var claimsPrincipal = User as ClaimsPrincipal;
 
-            var client = new OAuth2Client(new Uri("http://localhost:24837/connect/token"), "socialnetwork", "secret");
+            var client = new OAuth2Client(new Uri(ConfigurationManager.AppSettings["IdentityServerUrl"] + "/connect/token"), "socialnetwork", "secret");
             var requestedResponse = client.RequestAccessTokenRefreshToken(claimsPrincipal.FindFirst("refresh_token").Value);
 
             var manager = HttpContext.GetOwinContext().Authentication;

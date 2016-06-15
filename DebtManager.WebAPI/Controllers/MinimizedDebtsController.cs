@@ -21,7 +21,7 @@ namespace DebtManager.WebAPI.Controllers
         public IEnumerable<DebtDto> Get()
         {
             var claimsPrincipal = User as ClaimsPrincipal;
-            var username = claimsPrincipal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var username = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             #region Dependencies
 

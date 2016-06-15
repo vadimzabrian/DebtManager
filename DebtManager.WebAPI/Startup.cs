@@ -1,6 +1,7 @@
 ﻿using IdentityServer3.AccessTokenValidation;
 using Microsoft.Owin;
 using Owin;
+using System.Configuration;
 
 [assembly: OwinStartupAttribute(typeof(DebtManager.WebAPI.Startup))]
 namespace DebtManager.WebAPI
@@ -11,7 +12,7 @@ namespace DebtManager.WebAPI
         {
             app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
             {
-                Authority = "http://localhost:24837"                
+                Authority = ConfigurationManager.AppSettings["IdentityServerUrl"]              
             });
         }
     }

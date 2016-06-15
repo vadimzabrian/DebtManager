@@ -12,7 +12,7 @@ namespace DebtManager.WebAPI.Controllers
         public Balance Get()
         {
             var claimsPrincipal = User as ClaimsPrincipal;
-            var username = claimsPrincipal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var username = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             return DependencyResolver.Resolve<DebtManager.Application.IBalanceCalculator>().ExecuteFor(username);
         }
